@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
-import { X, User, Sliders, Shield, Terminal, Hammer, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, User, Sliders, Shield, Terminal, Hammer, ChevronRight, Bug } from 'lucide-react';
 import AxonLogo from './AxonLogo.jsx';
 import { useCurrentScreen, useUserName } from '../state/AxonStateContext';
+import { CrashLogModal } from './CrashLogModal';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -23,6 +24,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const { setCurrentScreen } = useCurrentScreen();
   // Stage 1C-iv: userName via state root
   const { userName, setUserName } = useUserName();
+  const [isCrashLogOpen, setIsCrashLogOpen] = useState(false);
+  // The crash log closes with Settings, so it never reopens by itself later
+  useEffect(() => {
+    if (!isOpen) setIsCrashLogOpen(false);
+  }, [isOpen]);
   if (!isOpen) return null;
 
   const handleLogoTap = () => {
@@ -110,6 +116,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           <ChevronRight size={16} className="text-[#7A7C82] group-hover:text-white transition-colors shrink-0" />
         </button>
 
+        {/* Crash Log Row */}
+        <button
+          onClick={() => setIsCrashLogOpen(true)}
+          className="w-full flex items-center justify-between p-3.5 bg-[#141517] hover:bg-[#1E1F23] rounded-2xl border border-white/5 transition-colors cursor-pointer group text-left"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-[#E85A3C]/10 border border-[#E85A3C]/20 flex items-center justify-center text-[#E85A3C] shrink-0">
+              <Bug size={15} />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-medium text-white text-xs">Crash log</span>
+              <span className="text-[11px] text-[#7A7C82]">Errors the app caught, to view or save</span>
+            </div>
+          </div>
+          <ChevronRight size={16} className="text-[#7A7C82] group-hover:text-white transition-colors shrink-0" />
+        </button>
+
         <div className="flex justify-end pt-2">
           <button
             onClick={onClose}
@@ -119,6 +142,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </button>
         </div>
       </div>
+
+      {isCrashLogOpen && <CrashLogModal onClose={() => setIsCrashLogOpen(false)} />}
     </div>
   );
 };

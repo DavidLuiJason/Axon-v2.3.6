@@ -12,6 +12,8 @@ import { registerAxonToolsInterface } from './interfaces/registerAxonTools';
 import { registerAxonSourceInterface } from './interfaces/registerAxonSource';
 import { registerInterfaceCaptureInterface } from './interfaces/registerInterfaceCapture';
 import { registerBackgroundProofInterface } from './interfaces/registerBackgroundProof';
+import { RootBoundary } from './components/RootBoundary';
+import { getCrashLog, installGlobalCrashHandlers } from './crash/crashLog';
 
 // Stage 4A: Settings capability (declarative; not tied to modal open state)
 registerSettingsCapability();
@@ -34,8 +36,13 @@ registerInterfaceCaptureInterface();
 // Stage 6: Background Proof interface
 registerBackgroundProofInterface();
 
+// Errors React cannot catch (event handlers, timers, unhandled promises) go to the crash log
+installGlobalCrashHandlers(getCrashLog(), window);
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <RootBoundary>
+      <App />
+    </RootBoundary>
   </StrictMode>,
 );

@@ -16,6 +16,7 @@ import { InterfaceCaptureScreen } from './components/InterfaceCaptureScreen';
 import { AxonToolsScreen } from './components/AxonToolsScreen';
 import { AxonBuildScreen } from './components/AxonBuildScreen';
 import { BackgroundProofScreen } from './components/BackgroundProofScreen';
+import { ScreenGuard } from './components/ScreenGuard';
 import { sendQueryToAxonBoundary } from './services/axonBrainInterface';
 import { AxonMode } from './types';
 import { AxonStateProvider, useTokensModal, useCurrentScreen, useChatSession, INITIAL_REFERENCE_MESSAGES } from './state/AxonStateContext';
@@ -131,6 +132,7 @@ function AppInner() {
 
   return (
     <div className="relative w-full h-dvh bg-[#121315] text-[#ECECEC] font-sans antialiased overflow-hidden flex flex-col">
+      <ScreenGuard onOpenMenu={handleNonChatLogoClick}>
       {currentScreen === 'axon-source' ? (
         <AxonSourceScreen
           onLogoClick={handleNonChatLogoClick}
@@ -190,6 +192,7 @@ function AppInner() {
           />
         </>
       )}
+      </ScreenGuard>
 
       {/* 4. NAVIGATION DRAWER OVERLAY (Image 3) */}
       <NavigationDrawer

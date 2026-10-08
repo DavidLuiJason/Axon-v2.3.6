@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "test:chat": "tsx tests/chatSession.test.ts",
+    "test:chat": "tsx tests/chatSession.test.ts && tsx tests/crash.test.ts",
     "test:bg": "tsx tests/elapsedFormat.test.ts && tsx tests/verdict.test.ts",
     "test:kernel": "tsx tests/kernel.test.ts && tsx tests/brain.test.ts && tsx tests/tools.test.ts",
     "cap:sync": "npx cap sync android",
